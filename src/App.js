@@ -1,25 +1,34 @@
-import logo from './logo.svg';
+import React, { Component } from 'react'
 import './App.css';
+import { getBoletos } from './services/services';
+import FolioInput from './components/FolioInput';
+import BoletosList from './components/BoletosList';
+class App extends Component {
+  state = {
+    folioPreimpreso: {},
+    boletos: []
+  }
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  findMovimientos = folio => {
+    console.log("App findMovimientos: "+folio);
+    getBoletos(folio)
+      .then(boletos => this.setState({ boletos }))
+  }
+
+  render() {
+    const { boletos, folioPreimpreso } = this.state;
+    console.log("Boletos: "+boletos);
+    boletos.map(boleto => console.log(boleto.claveCorrida))
+    return (
+
+      <div className="App">
+        <FolioInput buscarMovimientos ={this.findMovimientos} />
+        <BoletosList boletos={boletos}/>
+      </div>
+    );
+  }
 }
+
+
 
 export default App;
